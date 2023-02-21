@@ -1,8 +1,9 @@
 import { Injectable } from "@nestjs/common";
+import { UsuarioEntity } from "./usuario.entity";
 
 @Injectable()
 export class UsuarioRepository {
-    private usuarios = [];
+    private usuarios: UsuarioEntity[] = [];
 
     async salvar(usuario) {
         this.usuarios.push(usuario);
@@ -15,14 +16,6 @@ export class UsuarioRepository {
     async existeComEmail(email: string) {
         const possivelUsuario = this.usuarios.find(
             usuario => usuario.email === email
-        );
-
-        return possivelUsuario !== undefined;
-    }
-
-    async existeComMatricula(matricula: string) {
-        const possivelUsuario = this.usuarios.find(
-            usuario => usuario.matricula === matricula
         );
 
         return possivelUsuario !== undefined;

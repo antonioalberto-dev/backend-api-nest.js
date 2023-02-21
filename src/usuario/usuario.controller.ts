@@ -1,7 +1,9 @@
 import { Body, Controller, Post } from "@nestjs/common";
 import { Get } from "@nestjs/common/decorators";
 import { CreateStudentDTO } from "./dto/CreateStudent";
+import { UsuarioEntity } from "./usuario.entity";
 import { UsuarioRepository } from "./usuario.repository";
+import {v4 as uuid} from 'uuid'
 
 @Controller('/usuarios')
 export class UsuarioController {
@@ -10,8 +12,15 @@ export class UsuarioController {
 
     @Post()
     async criaUsuario(@Body() dadosDoUsuario: CreateStudentDTO) {
-        this.usuarioRepository.salvar(dadosDoUsuario)
-        return dadosDoUsuario;
+        const usuarioEntity = new UsuarioEntity();
+        usuarioEntity.email = dadosDoUsuario.email;
+        usuarioEntity.matricula = dadosDoUsuario.matricula;
+        usuarioEntity.nome = dadosDoUsuario.nome;
+        usuarioEntity.senha = dadosDoUsuario.senha;
+        usuarioEntity.id = uuid();
+
+        this.usuarioRepository.salvar(usuarioEntity)
+        return {id: usuarioEntity.id, message: "Aluno cadastrado com sucesso!"}
     }
 
     @Get()
