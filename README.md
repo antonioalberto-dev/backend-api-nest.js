@@ -44,5 +44,21 @@ $ npm run test:cov
 
 - 🟢 GET: http://localhost:3000/alunos (lista de alunos)
 - 🔵 POST: http://localhost:3000/alunos (cadastrar aluno)
+~~~json
+{
+	"nome": "nome",
+	"matricula": "matricula",
+	"email": "email@email.com",
+	"senha": "senha"
+}
+~~~
 - 🟠 PUT: http://localhost:3000/alunos/{id} (atualizar dados de aluno)
+~~~json
+{
+	"nome": "nome",
+	"matricula": "matricula",
+	"email": "email@email.com",
+	"senha": "senha"
+}
+~~~
 - 🔴 DELETE: http://localhost:3000/alunos/{id} (remover rigistro do aluno)
