@@ -1,10 +1,13 @@
 import { Body, Controller, Post } from "@nestjs/common";
-import { Get } from "@nestjs/common/decorators";
-import { CadastraAlunoDTO } from "./dto/CadastraAluno.dto";
+import { Get, Param, Put } from "@nestjs/common/decorators";
+import { v4 as uuid } from 'uuid'
+
 import { AlunoEntity } from "./aluno.entity";
 import { AlunoRepository } from "./aluno.repository";
-import { v4 as uuid } from 'uuid'
+
+import { CadastraAlunoDTO } from "./dto/CadastraAluno.dto";
 import { ListaAlunoDTO } from "./dto/ListaAluno.dto";
+import { AtualizaAlunoDTO } from "./dto/AtualizaAluno.dto";
 
 @Controller('/alunos')
 export class AlunoController {
@@ -21,7 +24,10 @@ export class AlunoController {
         usuarioEntity.id = uuid();
 
         this.usuarioRepository.salvar(usuarioEntity)
-        return { id: usuarioEntity.id, message: "Aluno cadastrado com sucesso!" }
+        return {
+            id: usuarioEntity.id,
+            mensagem: "Aluno cadastrado com sucesso!"
+        }
     }
 
     @Get()
@@ -29,13 +35,22 @@ export class AlunoController {
         const usuariosSalvos = await this.usuarioRepository.listar();
         const usuariosLista = usuariosSalvos.map(
             usuario => new ListaAlunoDTO(
-                usuario.id, 
-                usuario.nome, 
-                usuario.matricula, 
+                usuario.id,
+                usuario.nome,
+                usuario.matricula,
                 usuario.senha,
             )
         )
         return usuariosLista;
+    }
+
+    @Put('/:id')
+    async atualizaUsuario(@Param('id') id: string, @Body() novosDados: AtualizaAlunoDTO) {
+        const usuarioAtualizado = await this.usuarioRepository.atualiza(id, novosDados);
+        return {
+            usuario: usuarioAtualizado,
+            mensagem: 'Usuário atualizado com sucesso'
+        }
     }
 
 }
