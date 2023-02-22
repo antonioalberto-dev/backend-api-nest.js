@@ -21,7 +21,7 @@ export class AlunoRepository {
         return possivelUsuario !== undefined;
     }
 
-    async atualiza(id: string, dadosDeAtualizacao: Partial<AlunoEntity>) {
+    private buscaPorID(id: string) {
         const possivelAluno = this.usuarios.find(
             alunoSalvo => alunoSalvo.id === id
         );
@@ -30,14 +30,31 @@ export class AlunoRepository {
             throw new Error('Usuário não existe');
         }
 
+        return possivelAluno;
+    }
+
+    async atualiza(id: string, dadosDeAtualizacao: Partial<AlunoEntity>) {
+        
+        const aluno = this.buscaPorID(id);
+
         Object.entries(dadosDeAtualizacao).forEach(([chave, valor]) => {
             if(chave === 'id'){
                 return;
             }
 
-            possivelAluno[chave] = valor;
+            aluno[chave] = valor;
         })
 
-        return possivelAluno;
+        return aluno;
+    }
+
+    async remove(id: string){
+        const aluno =this.buscaPorID(id);
+
+        this.usuarios = this.usuarios.filter(
+            alunoSalvo => alunoSalvo.id !== id
+        );
+
+        return aluno;
     }
 }

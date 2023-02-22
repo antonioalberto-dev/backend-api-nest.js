@@ -1,5 +1,5 @@
 import { Body, Controller, Post } from "@nestjs/common";
-import { Get, Param, Put } from "@nestjs/common/decorators";
+import { Delete, Get, Param, Put } from "@nestjs/common/decorators";
 import { v4 as uuid } from 'uuid'
 
 import { AlunoEntity } from "./aluno.entity";
@@ -12,7 +12,7 @@ import { AtualizaAlunoDTO } from "./dto/AtualizaAluno.dto";
 @Controller('/alunos')
 export class AlunoController {
 
-    constructor(private usuarioRepository: AlunoRepository) { }
+    constructor(private alunoRepository: AlunoRepository) { }
 
     @Post()
     async criaUsuario(@Body() dadosDoUsuario: CadastraAlunoDTO) {
@@ -23,7 +23,7 @@ export class AlunoController {
         usuarioEntity.senha = dadosDoUsuario.senha;
         usuarioEntity.id = uuid();
 
-        this.usuarioRepository.salvar(usuarioEntity)
+        this.alunoRepository.salvar(usuarioEntity)
         return {
             id: usuarioEntity.id,
             mensagem: "Aluno cadastrado com sucesso!"
@@ -32,7 +32,7 @@ export class AlunoController {
 
     @Get()
     async listar() {
-        const usuariosSalvos = await this.usuarioRepository.listar();
+        const usuariosSalvos = await this.alunoRepository.listar();
         const usuariosLista = usuariosSalvos.map(
             usuario => new ListaAlunoDTO(
                 usuario.id,
@@ -46,10 +46,20 @@ export class AlunoController {
 
     @Put('/:id')
     async atualizaUsuario(@Param('id') id: string, @Body() novosDados: AtualizaAlunoDTO) {
-        const usuarioAtualizado = await this.usuarioRepository.atualiza(id, novosDados);
+        const usuarioAtualizado = await this.alunoRepository.atualiza(id, novosDados);
         return {
             usuario: usuarioAtualizado,
             mensagem: 'Usuário atualizado com sucesso'
+        }
+    }
+
+    @Delete('/:id')
+    async removeUsuario(@Param('id') id: string){
+        const alunoRemovido = await this.alunoRepository.remove(id);
+
+        return{
+            aluno: alunoRemovido,
+            mensagem: 'Usuário removido com sucesso'
         }
     }
 
