@@ -39,3 +39,10 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ``` -->
+
+## Métodos
+
+- 🟢 GET: http://localhost:3000/alunos (lista de alunos)
+- 🔵 POST: http://localhost:3000/alunos (cadastrar aluno)
+- 🟠 PUT: http://localhost:3000/alunos/{id} (atualizar dados de aluno)
+- 🔴 DELETE: http://localhost:3000/alunos/{id} (remover rigistro do aluno)
